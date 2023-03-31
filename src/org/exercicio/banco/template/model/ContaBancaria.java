@@ -4,9 +4,9 @@ import java.util.Objects;
 
 /**
 *
-* Nome:
-* Curso:
-* Matrícula:
+* Nome: Cidyclay Junyor
+* Curso: Informática para internet
+* Matrícula: 20222INFIG0060
 * 
 */
 public class ContaBancaria {
@@ -53,6 +53,12 @@ public class ContaBancaria {
 	 * @param valor
 	 */
 	public void depositar(double valor) {
+			if(valor>0 && status==true){
+				this.saldo = this.saldo + valor;
+			}else {
+				System.out.print("Valor invalido para deposito.");
+			}
+
 		
 	}
 
@@ -61,7 +67,7 @@ public class ContaBancaria {
 	 * Deve-se verificar primeiramente se a conta esta ativa, caso nao esteja a msg
 	 * "Conta inativa." deve ser impressa no console. Em seguida, caso o argumento
 	 * valor seja menor ou igual a 0 (zero), a seguinte msg deve ser impressa no
-	 * console "Valor inválido para saque." Por fim, caso o valor solicitado para o
+	 * console "Valor invalido para saque." Por fim, caso o valor solicitado para o
 	 * saque seja maior que o saldo disponivel, a msg "Saldo insuficiente." deve ser
 	 * exibida no console. Caso as checagens sejam atendidas, decremente o valor
 	 * solicitado do saldo. Utilize System.out.print();
@@ -69,6 +75,19 @@ public class ContaBancaria {
 	 * @param valor
 	 */
 	public void sacar(double valor) {
+		if(status==false){
+			System.out.print("Conta inativa.");
+		}else if(valor<=0){
+			System.out.print("Valor invalido para saque.");
+		}else if(valor>this.saldo){
+			System.out.print("Saldo insuficiente.");
+		} 
+		else if(valor>=saldo && status==true){
+			this.saldo = valor - this.saldo;
+		}
+		else{
+			saldo -= valor;
+		}
 		
 	}
 
@@ -81,6 +100,13 @@ public class ContaBancaria {
 	 * fechar a conta. Utilize System.out.print();
 	 */
 	public void fecharConta() {
+		if(status==false){
+			System.out.print("Conta ja inativa.");
+		}if(this.saldo>0){
+			System.out.print("Conta com saldo. Nao eh possivel fecha-la.");
+		}else if(status==true){
+			status=false;
+		}
 		
 	}
 
@@ -90,6 +116,11 @@ public class ContaBancaria {
 	 * ativa." deve ser exibida no console. Utilize System.out.print();
 	 */
 	public void reabrirConta() {
+		if(status==true){
+			System.out.print("Conta já ativa.");
+		}else{
+			status=true;
+		}
 
 	}
 
@@ -108,6 +139,17 @@ public class ContaBancaria {
 	 * @param destino
 	 */
 	public void realizarTransferencia(double quantia, ContaBancaria destino) {
+		if(status==false){
+			System.out.print("Conta de origem inativa.");
+		}else if(destino.status==false){
+			System.out.print("Conta de destino inativa.");
+		}else if(quantia>this.saldo){
+			System.out.print("Saldo insuficiente para transferencia.");
+		}
+		else{
+			saldo -= quantia;
+			destino.saldo += quantia;
+		}
 
 	}
 
@@ -127,21 +169,24 @@ public class ContaBancaria {
 		return status;
 	}
 
-	/**
-	 * Implemente o mehtodo hashCode
-	 */
 	@Override
 	public int hashCode() {
-		return 0;
+		return Objects.hash(numeroConta, saldo, status, titular);
 	}
 
-	/**
-	 * Implemente o mehtodo equals
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContaBancaria other = (ContaBancaria) obj;
+		return numeroConta == other.numeroConta
+				&& Double.doubleToLongBits(saldo) == Double.doubleToLongBits(other.saldo) && status == other.status
+				&& Objects.equals(titular, other.titular);
 	}
-	
-	
+
+
 }
